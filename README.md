@@ -1,10 +1,10 @@
 # System Obsługi Klienta
 
-A comprehensive **Customer Service Management System** built with modern .NET technologies, featuring multiple frontend implementations and a robust backend architecture.
+A comprehensive **Customer Service Management System** built with modern technologies, featuring multiple frontend implementations and a robust Java SpringBoot backend.
 
 ## 📋 Project Overview
 
-System Obsługi Klienta (Customer Service System) is a full-stack application designed to streamline customer service operations. The project demonstrates a professional multi-layered architecture with multiple client implementations supporting different platforms.
+System Obsługi Klienta (Customer Service System) is a full-stack application designed to streamline customer service operations. The project demonstrates a professional multi-layered architecture [...]
 
 ## 🏗️ Architecture
 
@@ -13,13 +13,13 @@ The project is organized into multiple branches, each handling different aspects
 | Branch | Purpose | Technology |
 |--------|---------|-----------|
 | **main** | Primary stable branch | - |
-| **backend** | API & Business Logic | .NET Backend Services |
+| **backend** | API & Business Logic | Java SpringBoot Backend Services |
 | **wpf** | Desktop Application | WPF (Windows Presentation Foundation) |
 | **maui** | Cross-Platform Mobile | MAUI (.NET Multi-platform App UI) |
 
 ## 🛠️ Technology Stack
 
-- **Backend**: .NET Framework/Core
+- **Backend**: Java SpringBoot
   - REST API
   - Business Logic Layer
   - Data Access Layer
@@ -37,8 +37,9 @@ The project is organized into multiple branches, each handling different aspects
 ## 🚀 Getting Started
 
 ### Prerequisites
-- .NET SDK (version as per branch requirements)
-- Visual Studio 2022 or Visual Studio Code
+- Java JDK (version as per branch requirements)
+- Maven or Gradle
+- Visual Studio 2022 or Visual Studio Code (for frontend development)
 - Git
 
 ### Building from Source
@@ -47,9 +48,8 @@ The project is organized into multiple branches, each handling different aspects
 ```bash
 git clone https://github.com/Hiumpik-err/System-Obslugi-Klienta.git
 git checkout backend
-dotnet restore
-dotnet build
-dotnet run
+mvn clean install
+mvn spring-boot:run
 ```
 
 #### WPF Desktop Client
@@ -83,7 +83,7 @@ System-Obslugi-Klienta/
 ## ✨ Features
 
 - **Multi-Client Architecture**: Desktop and mobile implementations
-- **RESTful API**: Scalable backend services
+- **RESTful API**: Scalable backend services powered by SpringBoot
 - **Cross-Platform Support**: Windows, iOS, Android, and macOS via MAUI
 - **Professional UI**: WPF for desktop, MAUI for mobile
 - **Modular Design**: Separation of concerns across branches
