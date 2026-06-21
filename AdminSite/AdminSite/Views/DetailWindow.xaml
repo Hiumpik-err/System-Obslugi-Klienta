@@ -1,0 +1,68 @@
+﻿<Window x:Class="AdminSite.Views.DetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AdminSite.Views"
+        mc:Ignorable="d"
+        Title="Szczegóły zgłoszenia" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen" Background="#FFF8FAFC">
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Nagłówek -->
+        <StackPanel>
+            <TextBlock x:Name="TxtId" Text="ID: req-0" Foreground="#FF64748B" FontSize="12" FontFamily="Consolas"/>
+            <TextBlock x:Name="TxtTitle" Text="Temat Zgłoszenia" FontSize="26" FontWeight="Bold" Foreground="#FF0F172A" TextWrapping="Wrap" Margin="0,5,0,10"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                <Border x:Name="BadgePriority" CornerRadius="8" Padding="10,4" Background="#FFFEE2E2" Margin="0,0,10,0">
+                    <TextBlock x:Name="TxtPriority" Text="Krytyczny" Foreground="#FFEF4444" FontWeight="Bold" FontSize="11"/>
+                </Border>
+                <TextBlock x:Name="TxtCategory" Text="UI/UX" VerticalAlignment="Center" Foreground="#FF475569" FontSize="12" FontWeight="SemiBold"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Sekcja Główna (Przewijana) -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Opis problemu:" FontSize="14" FontWeight="Bold" Foreground="#FF1E293B" Margin="0,0,0,5"/>
+                <Border Background="White" CornerRadius="12" BorderBrush="#FFE2E8F0" BorderThickness="1" Padding="15" Margin="0,0,0,20">
+                    <TextBlock x:Name="TxtDesc" Text="Treść zgłoszenia" Foreground="#FF334155" FontSize="13" TextWrapping="Wrap"/>
+                </Border>
+
+                <!-- Rekomendacje Automatycznej Naprawy -->
+                <TextBlock Text="Rekomendacje naprawy (AI Suggest):" FontSize="14" FontWeight="Bold" Foreground="#FF4F46E5" Margin="0,0,0,5"/>
+                <Border Background="#FFE0E7FF" CornerRadius="12" Padding="15" Margin="0,0,0,20">
+                    <ItemsControl x:Name="SolutionsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <TextBlock Text="✔" Foreground="#FF4F46E5" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding}" Foreground="#FF1E1B4B" FontSize="13"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Przyciski Stopki -->
+        <Grid Grid.Row="2" Margin="0,20,0,0">
+            <Button Content="Zamknij" HorizontalAlignment="Left" Width="100" Padding="10" Click="Close_Click"/>
+            <Button x:Name="BtnResolve" Content="Oznacz jako naprawione" HorizontalAlignment="Right" Background="#FF10B981" Foreground="White" FontWeight="Bold" Width="200" Padding="10" Click="Resolve_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="8" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
