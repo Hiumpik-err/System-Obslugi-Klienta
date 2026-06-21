@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Shopper.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Shopper"
+    xmlns:views="clr-namespace:Shopper.Views"
+    Title="Shopper">
+    
+    <TabBar>
+        <Tab Title="Sklep">
+            <ShellContent ContentTemplate="{DataTemplate views:ProductList}" />
+        </Tab>
+        <Tab Title="Zgłoś błąd">
+            <ShellContent ContentTemplate="{DataTemplate views:ReportPage}" />
+        </Tab>
+        <Tab Title="Koszyk">
+            <ShellContent ContentTemplate="{DataTemplate views:ShoppingCartPage}" />
+        </Tab>
+    </TabBar>
+    <!--<ShellContent ContentTemplate="{DataTemplate views:RegisterAccountPage}" />-->
+
+</Shell>

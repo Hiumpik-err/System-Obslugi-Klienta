@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Shopper.Views.CheckoutPage"
+             Title="Podsumowanie zamówienia">
+    <Grid RowDefinitions="*, Auto">
+
+        <ScrollView Grid.Row="0" Padding="15">
+            <VerticalStackLayout Spacing="20">
+
+                <Label Text="Adres dostawy" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                <Border StrokeShape="RoundRectangle 12" Padding="15" StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+
+                    <VerticalStackLayout Spacing="10">
+                        <Entry x:Name="FullNameEntry" Placeholder="Imię i nazwisko" />
+                        <Entry x:Name="StreetEntry" Placeholder="Ulica i numer domu" />
+
+                        <Grid ColumnDefinitions="*, *">
+                            <Entry Grid.Column="0" x:Name="PostalCodeEntry" Placeholder="Kod pocztowy" Keyboard="Numeric" Margin="0,0,5,0"/>
+                            <Entry Grid.Column="1" x:Name="CityEntry" Placeholder="Miasto" Margin="5,0,0,0"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="Metoda płatności" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                <Border StrokeShape="RoundRectangle 12" Padding="15" StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+
+                    <VerticalStackLayout Spacing="12">
+                        <RadioButton x:Name="BlikRadio" Content="BLIK" IsChecked="True" GroupName="PaymentMethods" />
+                        <RadioButton x:Name="CardRadio" Content="Karta płatnicza (Visa/Mastercard)" GroupName="PaymentMethods" />
+                        <RadioButton x:Name="TransferRadio" Content="Przelew bankowy online" GroupName="PaymentMethods" />
+                        <RadioButton x:Name="CodRadio" Content="Za pobraniem (przy odbiorze)" GroupName="PaymentMethods" />
+                    </VerticalStackLayout>
+                </Border>
+
+				<Label Text="Uwagi do zamówienia (opcjonalnie)" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+				<Border StrokeShape="RoundRectangle 12" Padding="15" StrokeThickness="1"
+						Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+						BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                    <VerticalStackLayout>
+                        <Editor x:Name="OrderNotesEditor"
+							Placeholder="Wpisz uwagi dla kuriera lub sklepu (np. kod do domofonu)..."
+							HeightRequest="90"
+							AutoSize="Disabled"
+							MaxLength="500"
+							TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+							PlaceholderColor="Gray"/>
+
+                        <Editor x:Name="OrderExpectations"
+					        Placeholder="Wpisz swoje oczekiwania, w razie ewentualnej pomyłki (Zdarzają się bardzo rzadko)!"
+					        HeightRequest="90"
+					        AutoSize="Disabled"
+					        MaxLength="500"
+					        TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+					        PlaceholderColor="Gray"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="Podsumowanie kosztów" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                <Border StrokeShape="RoundRectangle 12" Padding="15" StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Grid.Column="0" Text="Wartość produktów:" TextColor="Gray"/>
+                            <Label Grid.Column="1" x:Name="ProductsSubtotalLabel" Text="0.00 zł" FontAttributes="Bold"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Grid.Column="0" Text="Koszt dostawy:" TextColor="Gray"/>
+                            <Label Grid.Column="1" x:Name="DeliveryCostLabel" Text="14.99 zł" FontAttributes="Bold"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#E0E0E0, Dark=#333333}" Margin="0,5"/>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Grid.Column="0" Text="Do zapłaty ogółem:" FontSize="16" FontAttributes="Bold"/>
+                            <Label Grid.Column="1" x:Name="TotalOrderLabel" Text="0.00 zł" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border Grid.Row="1" 
+                StrokeShape="RoundRectangle 16,16,0,0"
+                StrokeThickness="1"
+                Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                BackgroundColor="{AppThemeBinding Light=#F9F9F9, Dark=#1A1A1A}"
+                Padding="20,15">
+
+            <Button Text="Kupuję i płacę" 
+                    CornerRadius="8"
+                    HeightRequest="50"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    Clicked="OnOrderSubmittedClicked"/>
+        </Border>
+    </Grid>
+</ContentPage>

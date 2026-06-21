@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Shopper.Models"
+             x:Class="Shopper.Views.ProductList"
+             Title="Sklep Internetowy">
+    <Grid RowDefinitions="Auto, *">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto" Margin="10,5" VerticalOptions="Center">
+
+            <SearchBar x:Name="ProductSearchBar"
+                   Grid.Column="0" 
+                   Placeholder="Szukaj produktów..." 
+                   TextChanged="OnSearchBarTextChanged"
+                   Margin="0,0,5,0"/>
+
+            <Button Grid.Column="1"
+                Text="👤"
+                FontSize="20"
+                WidthRequest="45"
+                HeightRequest="45"
+                CornerRadius="22"
+                Padding="0"
+                Margin="0,0,5,0"
+                BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                Clicked="OnProfileIconClicked"/>
+
+            <Button Grid.Column="2"
+                Text="🛒"
+                FontSize="20"
+                WidthRequest="45"
+                HeightRequest="45"
+                CornerRadius="22"
+                Padding="0"
+                BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                Clicked="OnCartIconClicked"/>
+        </Grid>
+
+        <RefreshView x:Name="ProductsRefreshView"
+                 Grid.Row="1" 
+                 Refreshing="OnRefreshViewRefreshing">
+
+            <CollectionView x:Name="ProductsCollectionView"
+                        SelectionMode="None"
+                        Margin="10">
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" 
+                                 Span="2" 
+                                 HorizontalItemSpacing="10" 
+                                 VerticalItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <Border StrokeShape="RoundRectangle 12"
+                            StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                            BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                            Padding="10"
+                            HeightRequest="280">
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnProductItemTapped"/>
+                            </Border.GestureRecognizers>
+
+                            <Grid RowDefinitions="*, Auto, Auto, Auto">
+
+                                <Image Grid.Row="0" 
+                                   Source="{Binding Image}" 
+                                   Aspect="AspectFit"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"
+                                   HeightRequest="130"
+                                   Margin="0,0,0,10"/>
+
+                                <Label Grid.Row="1" 
+                                   Text="{Binding Category}" 
+                                   FontSize="10" 
+                                   TextColor="Gray" 
+                                   FontAttributes="Italic"
+                                   TextTransform="Uppercase"/>
+
+                                <Label Grid.Row="2" 
+                                   Text="{Binding Title}" 
+                                   FontAttributes="Bold" 
+                                   FontSize="14"
+                                   LineBreakMode="TailTruncation" 
+                                   MaxLines="2"
+                                   Margin="0,2,0,5"
+                                   TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"/>
+
+                                <Label Grid.Row="3" 
+                                   Text="{Binding Price, StringFormat='{0:F2} zł'}" 
+                                   TextColor="{StaticResource Primary}" 
+                                   FontAttributes="Bold" 
+                                   FontSize="16"
+                                   VerticalOptions="EndAndExpand"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="30">
+                        <Label Text="Nie znaleziono produktów." 
+                           HorizontalTextAlignment="Center" 
+                           FontSize="16"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

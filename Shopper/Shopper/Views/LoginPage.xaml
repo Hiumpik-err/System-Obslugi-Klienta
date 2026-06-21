@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Shopper.Views.LoginPage"
+             Title="Logowanie"
+             BackgroundColor="{AppThemeBinding Light=#F5F5F7, Dark=#121212}">
+
+<Grid RowDefinitions="*, Auto, *"
+      ColumnDefinitions="*, 400, *"
+      Padding="0,20">
+
+
+        <Border Grid.Row="1" Grid.Column="1"
+                Margin="20"
+                Padding="30"
+                StrokeShape="RoundRectangle 16"
+                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
+                StrokeThickness="0">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.1"/>
+            </Border.Shadow>
+
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="15">
+
+                <VerticalStackLayout Grid.Row="0" Spacing="5" Margin="0,0,0,10">
+                    <Label Text="Witaj z powrotem!" 
+                           FontSize="28" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light=#1C1C1E, Dark=White}"/>
+                    <Label Text="Zaloguj się do swojego konta" 
+                           FontSize="14" 
+                           TextColor="Gray" 
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <Border Grid.Row="1" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="LightGray" Padding="10,2">
+                    <Entry Placeholder="Adres e-mail" 
+                           Keyboard="Email"
+                           ClearButtonVisibility="WhileEditing"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                           x:Name="email"/>
+                </Border>
+
+                <Border Grid.Row="2" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="LightGray" Padding="10,2">
+                    <Entry Placeholder="Hasło" 
+                           IsPassword="True"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                           x:Name="password"/>
+                </Border>
+
+                <Button Grid.Row="3" 
+                        Text="Zapomniałeś hasła?" 
+                        TextTransform="None"
+                        FontSize="13"
+                        Background="Transparent"
+                        TextColor="#512BD4"
+                        HorizontalOptions="End"
+                        Padding="0"
+                        Clicked="ForgotPassword"/>
+
+                <Button Grid.Row="4" 
+                        Text="Zaloguj się" 
+                        HeightRequest="50"
+                        CornerRadius="8"
+                        BackgroundColor="#512BD4"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Margin="0,10,0,0"
+                        Clicked="Login"/>
+
+                <HorizontalStackLayout Grid.Row="5" HorizontalOptions="Center" Spacing="5" Margin="0,10,0,0">
+                    <Label Text="Nie masz konta?" VerticalOptions="Center"/>
+                    <Button Text="Zarejestruj się" 
+                            TextTransform="None"
+                            Background="Transparent" 
+                            TextColor="#512BD4" 
+                            FontAttributes="Bold"
+                            Padding="0"
+                            Clicked="GoRegister"/>
+                </HorizontalStackLayout>
+
+            </Grid>
+        </Border>
+
+        <ContentView Grid.Row="0" Grid.RowSpan="3" 
+                     Grid.Column="0" Grid.ColumnSpan="3"
+                     BackgroundColor="{AppThemeBinding Light=#80FFFFFF, Dark=#80000000}" 
+                     IsVisible="False" 
+                     x:Name="LoadingOverlay">
+
+            <VerticalStackLayout VerticalOptions="Center" 
+                                 HorizontalOptions="Center" 
+                                 Spacing="15">
+
+                <Image Source="loading_screen.gif"
+                       IsAnimationPlaying="True" 
+                       WidthRequest="120"
+                       HeightRequest="120"
+                       x:Name="LoadingGif" />
+
+                <Label Text="Logowanie..." 
+                       FontSize="16" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#512BD4, Dark=White}" 
+                       HorizontalOptions="Center"/>
+
+            </VerticalStackLayout>
+        </ContentView>
+
+    </Grid>
+</ContentPage>

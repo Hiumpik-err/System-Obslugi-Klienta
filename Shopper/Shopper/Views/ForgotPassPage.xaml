@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Shopper.Views.ForgotPassPage"
+             Title="ForgotPassPage">
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="25" VerticalOptions="Center">
+
+            <Label Text="🔒" 
+                   FontSize="60" 
+                   HorizontalOptions="Center" 
+                   Margin="0,0,0,10"/>
+
+            <VerticalStackLayout x:Name="EmailFormState" Spacing="20" IsVisible="True">
+                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                    <Label Text="Zapomniałeś hasła?" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"/>
+
+                    <Label Text="Wpisz swój adres e-mail przypisany do konta. Wyślemy Ci instrukcje resetowania hasła." 
+                           FontSize="14" 
+                           TextColor="Gray" 
+                           HorizontalTextAlignment="Center" 
+                           Margin="10,0"/>
+                </VerticalStackLayout>
+
+                <Border StrokeShape="RoundRectangle 12" 
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                        Padding="15">
+
+                    <VerticalStackLayout Spacing="15">
+                        <Entry x:Name="EmailEntry" 
+                               Placeholder="Adres e-mail" 
+                               Keyboard="Email"
+                               TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Text="WYŚLIJ LINK" 
+                        CornerRadius="10"
+                        HeightRequest="55"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        Clicked="OnSendResetLinkClicked"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="SuccessState" Spacing="20" IsVisible="False">
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Sprawdź skrzynkę!" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"/>
+
+                    <Label x:Name="SuccessMessageLabel"
+                           Text="Jeśli podany adres istnieje w naszej bazie, wysłaliśmy na niego wiadomość z linkiem do resetowania hasła." 
+                           FontSize="14" 
+                           TextColor="Gray" 
+                           HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+
+                <Button Text="POWRÓT DO LOGOWANIA" 
+                        CornerRadius="10"
+                        HeightRequest="55"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        Clicked="OnBackToLoginClicked"/>
+            </VerticalStackLayout>
+
+            <Button x:Name="BackToLoginLink"
+                    Text="Wróć do logowania" 
+                    TextTransform="None"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}"
+                    FontAttributes="Bold"
+                    Clicked="OnBackToLoginClicked"
+                    HorizontalOptions="Center"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Shopper.Views.RegisterAccountPage"
+             Title="Rejestracja"
+             BackgroundColor="{AppThemeBinding Light=#F5F5F7, Dark=#121212}">
+    <Grid>
+
+        <ScrollView>
+            <Grid RowDefinitions="*, Auto, *"
+                  ColumnDefinitions="*, 400, *"
+                  Padding="0,20">
+
+                <Border Grid.Row="1" Grid.Column="1"
+                        Margin="20"
+                        Padding="30"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
+                        StrokeThickness="0">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.1"/>
+                    </Border.Shadow>
+
+                    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="15">
+
+                        <VerticalStackLayout Grid.Row="0" Spacing="5" Margin="0,0,0,10">
+                            <Label Text="Utwórz konto" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold" 
+                                   HorizontalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#1C1C1E, Dark=White}"/>
+                            <Label Text="Dołącz do Shopper już dziś" 
+                                   FontSize="14" 
+                                   TextColor="Gray" 
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+
+                        <Border Grid.Row="1" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="LightGray" Padding="10,2">
+                            <Entry Placeholder="Imię" 
+                                   Keyboard="Text"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                   x:Name="fname"/>
+                        </Border>
+
+                        <Border Grid.Row="2" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="LightGray" Padding="10,2">
+                            <Entry Placeholder="Nazwisko" 
+                                   Keyboard="Text"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                   x:Name="lname"/>
+                        </Border>
+
+                        <Border Grid.Row="3" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="LightGray" Padding="10,2">
+                            <Entry Placeholder="Adres e-mail" 
+                                   Keyboard="Email"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                   x:Name="email"/>
+                        </Border>
+
+                        <Border Grid.Row="4" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="LightGray" Padding="10,2">
+                            <Entry Placeholder="Hasło (min. 8 znaków)" 
+                                   IsPassword="True"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                   x:Name="password"/>
+                        </Border>
+
+                        <Button Grid.Row="5" 
+                                Text="Zarejestruj się" 
+                                HeightRequest="50"
+                                CornerRadius="8"
+                                BackgroundColor="#512BD4"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                Margin="0,10,0,0"
+                                Clicked="Register"/>
+
+                        <HorizontalStackLayout Grid.Row="6" HorizontalOptions="Center" Spacing="5" Margin="0,10,0,0">
+                            <Label Text="Masz już konto?" VerticalOptions="Center"/>
+                            <Button Text="Zaloguj się" 
+                                    TextTransform="None"
+                                    Background="Transparent" 
+                                    TextColor="#512BD4" 
+                                    FontAttributes="Bold"
+                                    Padding="0"
+                                    Clicked="GoLogin"/>
+                        </HorizontalStackLayout>
+
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollView>
+
+        <ContentView Grid.Row="0"
+                     Grid.RowSpan="1"
+                     VerticalOptions="Fill"
+                     HorizontalOptions="Fill"
+                     BackgroundColor="{AppThemeBinding Light=#80FFFFFF, Dark=#80000000}" 
+                     IsVisible="False" 
+                     x:Name="RegisterLoadingOverlay"
+                     ZIndex="1">
+
+            <VerticalStackLayout VerticalOptions="Center" 
+                                 HorizontalOptions="Center" 
+                                 Spacing="15">
+
+                <Image Source="loading_screen.gif"
+                       IsAnimationPlaying="True" 
+                       WidthRequest="120"
+                       HeightRequest="120"
+                       x:Name="RegisterLoadingGif" />
+
+                <Label Text="Tworzenie konta..." 
+                       FontSize="16" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#512BD4, Dark=White}" 
+                       HorizontalOptions="Center"/>
+
+            </VerticalStackLayout>
+        </ContentView>
+
+    </Grid>
+</ContentPage>
