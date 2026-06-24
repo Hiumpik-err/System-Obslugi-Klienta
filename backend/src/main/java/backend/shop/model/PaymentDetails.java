@@ -1,18 +1,8 @@
 package backend.shop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
-import org.apache.logging.log4j.util.Lazy;
-
 import java.time.LocalDate;
-import java.util.Date;
 
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Entity
 public class PaymentDetails{
     @Id
