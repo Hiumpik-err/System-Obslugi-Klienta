@@ -36,7 +36,7 @@ public class SecurityConfig {
                                 .usernameParameter("username")
                                 .passwordParameter("password")
                                 .successHandler(((request, response, authentication) -> {
-                                    UserProfiler userProfiler = (UserProfiler) authentication.getPrincipal();
+                                    /*UserProfiler userProfiler = (UserProfiler) authentication.getPrincipal();
                                     Users user = (Users) userProfiler.getUser();
 
                                     response.setStatus(HttpServletResponse.SC_OK);
@@ -54,7 +54,8 @@ public class SecurityConfig {
                                                 "deliveryDetails", user.getDeliveryDetails() != null ? user.getDeliveryDetails() : ""
                                     );
                                     ObjectMapper om = new ObjectMapper();
-                                    om.writeValue(response.getWriter(), responseBody);
+                                    om.writeValue(response.getWriter(), responseBody);*/
+                                    response.setStatus(HttpServletResponse.SC_ACCEPTED);
                                 }))
                                 .failureHandler(((request, response, exception) -> {
                                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
