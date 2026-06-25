@@ -15,4 +15,6 @@ public interface UsersRepo extends JpaRepository<Users, Integer> {
 
     @Query("SELECT u FROM Users u JOIN FETCH u.role WHERE :role MEMBER OF u.role AND u.isActive = true")
     List<Users> findAllActiveByRoleWithRoles(@Param("role") String role);
+
+    boolean existsByEmail(String email);
 }

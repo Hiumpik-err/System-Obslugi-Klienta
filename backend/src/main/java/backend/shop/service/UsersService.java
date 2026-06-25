@@ -1,5 +1,7 @@
 package backend.shop.service;
 
+import backend.shop.dto.UserDTO;
+import backend.shop.exceptions.UserAlreadyExistsException;
 import backend.shop.model.Users;
 import backend.shop.repo.UsersRepo;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,23 +16,27 @@ import java.util.List;
 public class UsersService {
     private final UsersRepo repo;
     private final JavaMailSender mailSender;
+    private final BCryptPasswordEncoder bcryptPasswordEncoder;
 
-    public UsersService(UsersRepo repo, JavaMailSender sender){
+    public UsersService(UsersRepo repo, JavaMailSender sender, BCryptPasswordEncoder bcryptPasswordEncoder){
         this.repo = repo;
         this.mailSender = sender;
+        this.bcryptPasswordEncoder = bcryptPasswordEncoder;
     }
 
-    public Optional<Users> registerUser(Users user){
-        try{
-            Users userCopy = new Users(user);
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            repo.save(user);
-            return Optional.of(userCopy);
+    public Users registerUser(UserDTO userDTO) throws UserAlreadyExistsException {
+        if(this.repo.existsByEmail(userDTO.email())){
+            throw new UserAlreadyExistsException("Uzytkownik o podanym emailu juz istnieje");
+        }
+        Users user = Users.builder()
+                .firstName(userDTO.firstName())
+                .lastName(userDTO.lastName())
+                .email(userDTO.email())
+                .password(bcryptPasswordEncoder.encode(userDTO.password()))
+                .build();
 
-        }
-        catch (Exception ex){
-            return Optional.empty();
-        }
+        this.repo.save(user);
+        return user;
     }
 
     public boolean deleteUser(int id){

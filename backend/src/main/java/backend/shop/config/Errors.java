@@ -1,8 +1,9 @@
 package backend.shop.config;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice()
+@RestControllerAdvice()
 public class Errors{
+
 
 }

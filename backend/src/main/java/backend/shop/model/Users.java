@@ -2,13 +2,14 @@ package backend.shop.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -25,29 +26,37 @@ public class Users{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
+
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> role;
+    @CollectionTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Builder.Default
+    private Set<String> role = new HashSet<>();
 
+    @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private Instant accountCreationDate;
 
+    @Column(nullable = false)
+    @ColumnDefault("1")
     private boolean isActive;
 
     @OneToOne(mappedBy = "userId", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private DeliveryDetails deliveryDetails;
 
-    @PrePersist
-    protected void onCreate(){
-        accountCreationDate = Instant.now();
-        isActive = false;
-        if(role.isEmpty() || role == null){
-            role = Set.of("USER");
-        }
-    }
 
 }

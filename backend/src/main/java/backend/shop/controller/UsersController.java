@@ -1,8 +1,10 @@
 package backend.shop.controller;
 
+import backend.shop.dto.UserDTO;
+import backend.shop.exceptions.UserAlreadyExistsException;
 import backend.shop.model.Users;
 import backend.shop.service.UsersService;
-import org.apache.coyote.Response;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +23,10 @@ public class UsersController{
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody Users userData){
-        var x = this.usersService.registerUser(userData);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO) {
+        Users registeredUser = this.usersService.registerUser(userDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
 
-        if(x.isPresent()){
-            return new ResponseEntity<>(x.get(), HttpStatusCode.valueOf(200));
-        }
-        return new ResponseEntity<>("User created unsuccessfuly", HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> data){

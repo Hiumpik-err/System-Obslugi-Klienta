@@ -16,12 +16,12 @@ public class OrdersController {
         this.service = service;
     }
 
-    @PostMapping()
+    /*@PostMapping()
     public ResponseEntity<?> addNewOrder(@RequestBody Orders order){
         var id = this.service.addNewOrder(order);
         if(id.isPresent()){
             return new ResponseEntity<>(id.get(), HttpStatusCode.valueOf(200));
         }
         return new ResponseEntity<>("Cos poszlo nie tak", HttpStatusCode.valueOf(400));
-    }
+    }*/
 }

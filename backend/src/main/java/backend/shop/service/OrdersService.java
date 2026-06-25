@@ -13,7 +13,7 @@ public class OrdersService {
         this.repo = repo;
     }
 
-    public Optional<Integer> addNewOrder(Orders order){
+   /* public Optional<Integer> addNewOrder(Orders order){
         try{
             this.repo.save(order);
             Optional<Orders> orderEntity= this.repo.findFirstByOrderByOrderIdDesc();
@@ -26,5 +26,5 @@ public class OrdersService {
             System.out.println(ex.getMessage());
             return Optional.empty();
         }
-    }
+    }*/
 }
