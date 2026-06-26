@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +27,8 @@ public class SecurityConfig {
     private UserProfilerService userProfilerService;
 
     @Bean
-    public SecurityFilterChain userDetails(HttpSecurity http){
+    public SecurityFilterChain userDetails(HttpSecurity http) throws Exception{
+        ObjectMapper om = new ObjectMapper();
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         r ->
@@ -58,14 +61,35 @@ public class SecurityConfig {
                                     response.setStatus(HttpServletResponse.SC_ACCEPTED);
                                 }))
                                 .failureHandler(((request, response, exception) -> {
-                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                            response.setContentType("application/json");
+                                            response.setCharacterEncoding("UTF-8");
+
+                                            Map<String, Object> errorBody = Map.of(
+                                                    "timestamp", LocalDateTime.now().toString(),
+                                                    "status", HttpStatus.UNAUTHORIZED.value(),
+                                                    "error", HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                                                    "message", "Niepoprawny login lub hasło.",
+                                                    "path", request.getRequestURI()
+                                            );
+                                            om.writeValue(response.getWriter(), errorBody);
                                 })
                                 )
                 )
                 .exceptionHandling(e -> e
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().write("Unauthorized - Brak dostepu.");
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+
+                    Map<String, Object> errorBody = Map.of(
+                            "timestamp", LocalDateTime.now().toString(),
+                            "status", HttpStatus.UNAUTHORIZED.value(),
+                            "error", HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                            "message", "Pełna uwierzytelnienie jest wymagane do uzyskania dostępu do tego zasobu.",
+                            "path", request.getRequestURI()
+                    );
+                    om.writeValue(response.getWriter(), errorBody);
                 })
                 )
                 .logout(l ->
