@@ -28,6 +28,7 @@ public class UsersController{
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
 
     }
+    //Do zmiany na lepsze
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> data){
         String email = data.get("email");
@@ -37,12 +38,10 @@ public class UsersController{
         return new ResponseEntity<>("Cos poszlo nie tak", HttpStatusCode.valueOf(404));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable int id){
-        if(this.usersService.deleteUser(id)){
-            return new ResponseEntity<>("User deleted Successfuly", HttpStatusCode.valueOf(204));
-        }
-        return new ResponseEntity<>("User deleted unsuccessfuly", HttpStatusCode.valueOf(400));
+        this.usersService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Uzytkowik o ID: " + id + " zostal usuniety pomyslnie");
     }
 
     @PutMapping("/{id}/update")

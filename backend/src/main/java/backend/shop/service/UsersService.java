@@ -2,8 +2,10 @@ package backend.shop.service;
 
 import backend.shop.dto.UserDTO;
 import backend.shop.exceptions.UserAlreadyExistsException;
+import backend.shop.exceptions.UserNotDeletedException;
 import backend.shop.model.Users;
 import backend.shop.repo.UsersRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +26,7 @@ public class UsersService {
         this.bcryptPasswordEncoder = bcryptPasswordEncoder;
     }
 
+    @Transactional
     public Users registerUser(UserDTO userDTO) throws UserAlreadyExistsException {
         if(this.repo.existsByEmail(userDTO.email())){
             throw new UserAlreadyExistsException("Uzytkownik o podanym emailu juz istnieje");
@@ -38,16 +41,14 @@ public class UsersService {
         this.repo.save(user);
         return user;
     }
+    //poprawic w kwestii bledow serwerowych
+    @Transactional
+    public void deleteUser(int id) throws UserNotDeletedException {
+        if(!this.repo.existsById(id)){
+            throw new UserNotDeletedException("Nie znaleziono uzytkownika w bazie danych");
+        }
+        this.repo.deleteById(id);
 
-    public boolean deleteUser(int id){
-        try{
-            this.repo.deleteById(id);
-            return true;
-        }
-        catch (Exception ex){
-            System.out.println(ex.getMessage());
-            return false;
-        }
     }
 
     public Optional<Users> updateUser(int id, Users user) {
