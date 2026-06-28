@@ -1,8 +1,9 @@
 package backend.shop.service;
 
-import backend.shop.dto.UserDTO;
+import backend.shop.dto.UserRegistrationDTO;
+import backend.shop.dto.UserUpdateDTO;
 import backend.shop.exceptions.UserAlreadyExistsException;
-import backend.shop.exceptions.UserNotDeletedException;
+import backend.shop.exceptions.UserNotFoundException;
 import backend.shop.model.Users;
 import backend.shop.repo.UsersRepo;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 import java.util.List;
@@ -27,7 +29,7 @@ public class UsersService {
     }
 
     @Transactional
-    public Users registerUser(UserDTO userDTO) throws UserAlreadyExistsException {
+    public Users registerUser(UserRegistrationDTO userDTO){
         if(this.repo.existsByEmail(userDTO.email())){
             throw new UserAlreadyExistsException("Uzytkownik o podanym emailu juz istnieje");
         }
@@ -43,34 +45,23 @@ public class UsersService {
     }
 
     @Transactional
-    public void deleteUser(int id) throws UserNotDeletedException {
+    public void deleteUser(int id){
         if(!this.repo.existsById(id)){
-            throw new UserNotDeletedException("Nie znaleziono uzytkownika w bazie danych");
+            throw new UserNotFoundException("Nie znaleziono uzytkownika w bazie danych");
         }
         this.repo.deleteById(id);
     }
 
-    public Optional<Users> updateUser(int id, Users user) {
-        try{
-            Optional<Users> u = this.repo.findById(id);
-            if(u.isPresent()){
-                Users selectedUser = u.get();
-                selectedUser.setFirstName(user.getFirstName());
-                selectedUser.setLastName(user.getLastName());
-                selectedUser.setEmail(user.getEmail());
-                selectedUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-                selectedUser.setRole(user.getRole());
+    public Users updateUser(int id, UserUpdateDTO user) {
+        Users u = this.repo.findById(id).orElseThrow(() -> new UserNotFoundException("Nie znaleziono uzytkownika w bazie danych"));
 
-                System.out.println(selectedUser.toString());
-                this.repo.save(selectedUser);
-                return Optional.of(selectedUser);
-            }
-            throw new Exception("User not found");
-        }
-        catch (Exception ex){
-            System.out.println(ex.getMessage());
-            return Optional.empty();
-        }
+        if(StringUtils.hasText(user.firstName())) u.setFirstName(user.firstName());
+        if(StringUtils.hasText(user.lastName())) u.setLastName(user.lastName());
+        if(StringUtils.hasText(user.email())) u.setEmail(user.email());
+        if(StringUtils.hasText(user.password())) u.setPassword(bcryptPasswordEncoder.encode(user.password()));
+
+        this.repo.save(u);
+        return u;
     }
 
     public boolean restartPassword(String email){

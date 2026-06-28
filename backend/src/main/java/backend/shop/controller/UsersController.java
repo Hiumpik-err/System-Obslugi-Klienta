@@ -1,7 +1,7 @@
 package backend.shop.controller;
 
-import backend.shop.dto.UserDTO;
-import backend.shop.exceptions.UserAlreadyExistsException;
+import backend.shop.dto.UserRegistrationDTO;
+import backend.shop.dto.UserUpdateDTO;
 import backend.shop.model.Users;
 import backend.shop.service.UsersService;
 import jakarta.validation.Valid;
@@ -23,10 +23,9 @@ public class UsersController{
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO userDTO) {
         Users registeredUser = this.usersService.registerUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
-
     }
     //Do zmiany na lepsze
     @PostMapping("/forgot-password")
@@ -44,13 +43,11 @@ public class UsersController{
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Uzytkowik o ID: " + id + " zostal usuniety pomyslnie");
     }
 
-    @PutMapping("/{id}/update")
-    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody Users user){
-        var updatedUser = this.usersService.updateUser(id, user);
-        if(updatedUser.isPresent()){
-            return new ResponseEntity<>(updatedUser.get(), HttpStatusCode.valueOf(200));
-        }
-        return new ResponseEntity<>("Something went wrong", HttpStatusCode.valueOf(400));
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable int id, @Valid @RequestBody UserUpdateDTO user){
+        Users updatedUser = this.usersService.updateUser(id, user);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+
     }
 
     @PatchMapping("/{id}/set-active")

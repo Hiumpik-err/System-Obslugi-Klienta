@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record UserDTO(
+public record UserRegistrationDTO(
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         Integer userId,
 

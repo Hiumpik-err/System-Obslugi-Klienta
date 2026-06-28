@@ -2,7 +2,7 @@ package backend.shop.config;
 
 import backend.shop.exceptions.ErrorResponse;
 import backend.shop.exceptions.UserAlreadyExistsException;
-import backend.shop.exceptions.UserNotDeletedException;
+import backend.shop.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +16,6 @@ import java.time.LocalDateTime;
 @Slf4j
 public class GlobalExceptionsHandler {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> serverExceptionsHandler(Exception ex, WebRequest req){
-        log.error("KRYTYCZNY BŁĄD SERWERA: " + ex.getMessage());
-
-        ErrorResponse err = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .message("Cos poszlo nie tak. Sproboj jeszcze raz, za chwile. przepraszmy za uniedogonienia.")
-                .path(req.getDescription(false).replace("uri=", ""))
-                .build();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
-    }
-
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<?> userAlreadyExitstsExceptionHandler(UserAlreadyExistsException ex, WebRequest req){
         ErrorResponse err = ErrorResponse.builder()
@@ -42,8 +28,8 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
     }
 
-    @ExceptionHandler(UserNotDeletedException.class)
-    public ResponseEntity<?> userNotDeletedExceptionHandler(UserNotDeletedException ex, WebRequest req){
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> userNotDeletedExceptionHandler(UserNotFoundException ex, WebRequest req){
         ErrorResponse err = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -53,4 +39,18 @@ public class GlobalExceptionsHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
+
+    /*@ExceptionHandler(Exception.class)
+    public ResponseEntity<?> serverExceptionsHandler(Exception ex, WebRequest req){
+        log.error("KRYTYCZNY BŁĄD SERWERA: " + ex.getMessage());
+
+        ErrorResponse err = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .message("Cos poszlo nie tak. Sproboj jeszcze raz, za chwile. przepraszmy za uniedogonienia.")
+                .path(req.getDescription(false).replace("uri=", ""))
+                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
+    }*/
 }

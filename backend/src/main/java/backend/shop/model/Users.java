@@ -52,7 +52,7 @@ public class Users{
     private Instant accountCreationDate;
 
     @Column(nullable = false)
-    @ColumnDefault("1")
+    @ColumnDefault("0")
     private boolean isActive;
 
     @OneToOne(mappedBy = "userId", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
