@@ -41,14 +41,13 @@ public class UsersService {
         this.repo.save(user);
         return user;
     }
-    //poprawic w kwestii bledow serwerowych
+
     @Transactional
     public void deleteUser(int id) throws UserNotDeletedException {
         if(!this.repo.existsById(id)){
             throw new UserNotDeletedException("Nie znaleziono uzytkownika w bazie danych");
         }
         this.repo.deleteById(id);
-
     }
 
     public Optional<Users> updateUser(int id, Users user) {
