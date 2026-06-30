@@ -2,10 +2,9 @@ package backend.shop.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
+import java.util.Set;
 
 public record UserRegistrationDTO(
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -30,5 +29,8 @@ public record UserRegistrationDTO(
                 regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{10,}$",
                 message = "Hasło musi zawierać cyfrę, małą i wielką literę"
         )
-        String password
+        String password,
+
+        @NotEmpty
+        Set<String> role
 ) {}

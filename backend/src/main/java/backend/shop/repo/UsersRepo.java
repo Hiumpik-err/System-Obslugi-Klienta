@@ -13,7 +13,10 @@ import java.util.Optional;
 public interface UsersRepo extends JpaRepository<Users, Integer> {
     Optional<Users> getByEmail(String email);
 
-    @Query("SELECT u FROM Users u JOIN FETCH u.role WHERE :role MEMBER OF u.role AND u.isActive = true")
+    @Query("SELECT DISTINCT u FROM Users u " +
+            "LEFT JOIN FETCH u.deliveryDetails " +
+            "JOIN u.role r " +
+            "WHERE u.isActive = true AND r = :role")
     List<Users> findAllActiveByRoleWithRoles(@Param("role") String role);
 
     boolean existsByEmail(String email);

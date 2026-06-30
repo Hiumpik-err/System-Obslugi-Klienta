@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -51,18 +52,14 @@ public class UsersController{
 
     }
 
-    @PatchMapping("/{id}/set-active")
+    @PostMapping("/set-active/{id}")
     public ResponseEntity<?> setActive(@PathVariable int id){
-        boolean done = this.usersService.setActive(id);
-        if(done){
-            return new ResponseEntity<>("Done", HttpStatusCode.valueOf(200));
-        }
-        return new ResponseEntity<>("Done", HttpStatusCode.valueOf(404));
-
+        this.usersService.setActive(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Uzytkownik o id: " + id + " jest aktywny");
     }
 
     @GetMapping("/active-admins")
-    public ResponseEntity<?> getActiveAdmins() {
+    public ResponseEntity<List<UserDTO>> getActiveAdmins() {
         var activeAdmins = this.usersService.getActiveAdmins();
         return ResponseEntity.status(HttpStatus.OK).body(activeAdmins);
 

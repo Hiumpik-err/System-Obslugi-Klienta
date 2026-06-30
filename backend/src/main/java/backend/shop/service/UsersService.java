@@ -41,6 +41,7 @@ public class UsersService {
                 .lastName(userDTO.lastName())
                 .email(userDTO.email())
                 .password(bcryptPasswordEncoder.encode(userDTO.password()))
+                .role(userDTO.role())
                 .build();
 
         var newUser = this.repo.save(user);
@@ -125,23 +126,17 @@ public class UsersService {
         return sb.toString();
     }
 
-    public boolean setActive(int id){
-        try{
-            Optional<Users> userFound = this.repo.findById(id);
-            if(userFound.isPresent()) {
-                Users u = userFound.get();
-                u.setActive(true);
-                this.repo.save(u);
-                return true;
-            }
-            throw new Exception("user Not found");
+    @Transactional
+    public void setActive(int id){
+        var user = this.repo.findById(id);
+        if(user.isEmpty()) {
+            throw new UserNotFoundException("Uzytkownik o id: " + id + " nie istnieje w bazie");
         }
-        catch (Exception ex){
-            System.out.println(ex.getMessage());
-            return false;
-        }
-    }
+        Users u = user.get();
+        u.setActive(true);
+        this.repo.save(u);
 
+    }
     public List<UserDTO> getActiveAdmins() {
         var admins = this.repo.findAllActiveByRoleWithRoles("ADMIN");
         List<UserDTO> adminList = admins.stream().map(u -> new UserDTO(
