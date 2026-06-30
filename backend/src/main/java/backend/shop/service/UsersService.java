@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
@@ -141,7 +142,15 @@ public class UsersService {
         }
     }
 
-    public List<Users> getActiveAdmins() {
-        return this.repo.findAllActiveByRoleWithRoles("ADMIN");
+    public List<UserDTO> getActiveAdmins() {
+        var admins = this.repo.findAllActiveByRoleWithRoles("ADMIN");
+        List<UserDTO> adminList = admins.stream().map(u -> new UserDTO(
+                u.getUserId(), u.getFirstName(),
+                u.getLastName(), u.getEmail(),
+                u.getRole(),u.getAccountCreationDate(),
+                u.isActive(), u.getDeliveryDetails()
+        )).toList();
+
+        return adminList;
     }
 }
