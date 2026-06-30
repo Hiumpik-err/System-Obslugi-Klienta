@@ -1,5 +1,6 @@
 package backend.shop.service;
 
+import backend.shop.dto.UserDTO;
 import backend.shop.dto.UserRegistrationDTO;
 import backend.shop.dto.UserUpdateDTO;
 import backend.shop.exceptions.UserAlreadyExistsException;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class UsersService {
     }
 
     @Transactional
-    public Users registerUser(UserRegistrationDTO userDTO){
+    public UserDTO registerUser(UserRegistrationDTO userDTO){
         if(this.repo.existsByEmail(userDTO.email())){
             throw new UserAlreadyExistsException("Uzytkownik o podanym emailu juz istnieje");
         }
@@ -40,8 +42,18 @@ public class UsersService {
                 .password(bcryptPasswordEncoder.encode(userDTO.password()))
                 .build();
 
-        this.repo.save(user);
-        return user;
+        var newUser = this.repo.save(user);
+
+        return new UserDTO(
+                newUser.getUserId(),
+                newUser.getFirstName(),
+                newUser.getLastName(),
+                newUser.getEmail(),
+                newUser.getRole(),
+                newUser.getAccountCreationDate(),
+                newUser.isActive(),
+                newUser.getDeliveryDetails()
+        );
     }
 
     @Transactional
@@ -52,7 +64,8 @@ public class UsersService {
         this.repo.deleteById(id);
     }
 
-    public Users updateUser(int id, UserUpdateDTO user) {
+    @Transactional
+    public UserDTO updateUser(int id, UserUpdateDTO user) {
         Users u = this.repo.findById(id).orElseThrow(() -> new UserNotFoundException("Nie znaleziono uzytkownika w bazie danych"));
 
         if(StringUtils.hasText(user.firstName())) u.setFirstName(user.firstName());
@@ -60,8 +73,18 @@ public class UsersService {
         if(StringUtils.hasText(user.email())) u.setEmail(user.email());
         if(StringUtils.hasText(user.password())) u.setPassword(bcryptPasswordEncoder.encode(user.password()));
 
-        this.repo.save(u);
-        return u;
+        var newUser = this.repo.save(u);
+
+        return new UserDTO(
+                newUser.getUserId(),
+                newUser.getFirstName(),
+                newUser.getLastName(),
+                newUser.getEmail(),
+                newUser.getRole(),
+                newUser.getAccountCreationDate(),
+                newUser.isActive(),
+                newUser.getDeliveryDetails()
+        );
     }
 
     public boolean restartPassword(String email){
@@ -118,17 +141,7 @@ public class UsersService {
         }
     }
 
-    public Optional<List<Users>> getActiveAdmins() {
-        try{
-            List<Users> activeAdmins = this.repo.findAllActiveByRoleWithRoles("ADMIN");
-            if(!activeAdmins.isEmpty()){
-                return Optional.of(activeAdmins);
-            }
-            throw new Exception("Blad");
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Optional.empty();
-        }
+    public List<Users> getActiveAdmins() {
+        return this.repo.findAllActiveByRoleWithRoles("ADMIN");
     }
 }

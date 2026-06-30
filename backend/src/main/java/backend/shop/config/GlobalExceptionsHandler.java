@@ -6,11 +6,13 @@ import backend.shop.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice()
 @Slf4j
@@ -40,7 +42,25 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
 
-    /*@ExceptionHandler(Exception.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> methodArgumentNotValidExcpetionHandler(MethodArgumentNotValidException ex, WebRequest req){
+        String errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(err -> err.getField() + ":" + err.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        log.warn(errors);
+
+        ErrorResponse err = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(req.getDescription(false).replace("uri=", ""))
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<?> serverExceptionsHandler(Exception ex, WebRequest req){
         log.error("KRYTYCZNY BŁĄD SERWERA: " + ex.getMessage());
 
@@ -52,5 +72,5 @@ public class GlobalExceptionsHandler {
                 .path(req.getDescription(false).replace("uri=", ""))
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
-    }*/
+    }
 }

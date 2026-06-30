@@ -1,5 +1,6 @@
 package backend.shop.controller;
 
+import backend.shop.dto.UserDTO;
 import backend.shop.dto.UserRegistrationDTO;
 import backend.shop.dto.UserUpdateDTO;
 import backend.shop.model.Users;
@@ -23,8 +24,8 @@ public class UsersController{
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO userDTO) {
-        Users registeredUser = this.usersService.registerUser(userDTO);
+    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserRegistrationDTO userDTO) {
+        UserDTO registeredUser = this.usersService.registerUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
     //Do zmiany na lepsze
@@ -38,14 +39,14 @@ public class UsersController{
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable int id){
+    public ResponseEntity<String> deleteUser(@PathVariable int id){
         this.usersService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Uzytkowik o ID: " + id + " zostal usuniety pomyslnie");
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable int id, @Valid @RequestBody UserUpdateDTO user){
-        Users updatedUser = this.usersService.updateUser(id, user);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @Valid @RequestBody UserUpdateDTO user){
+        UserDTO updatedUser = this.usersService.updateUser(id, user);
         return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
 
     }
@@ -63,10 +64,8 @@ public class UsersController{
     @GetMapping("/active-admins")
     public ResponseEntity<?> getActiveAdmins() {
         var activeAdmins = this.usersService.getActiveAdmins();
-        if (activeAdmins.isPresent()) {
-            return new ResponseEntity<>(activeAdmins.get(), HttpStatusCode.valueOf(200));
-        }
-        return new ResponseEntity<>("Error", HttpStatusCode.valueOf(400));
+        return ResponseEntity.status(HttpStatus.OK).body(activeAdmins);
+
     }
 
 }
