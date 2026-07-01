@@ -23,7 +23,7 @@ public class GlobalExceptionsHandler {
         ErrorResponse err = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
-                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
                 .message(ex.getMessage())
                 .path(req.getDescription(false).replace("uri=", ""))
                 .build();
