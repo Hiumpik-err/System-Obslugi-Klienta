@@ -1,6 +1,7 @@
 package backend.shop.config;
 
 import backend.shop.exceptions.ErrorResponse;
+import backend.shop.exceptions.OrderNotFoundException;
 import backend.shop.exceptions.UserAlreadyExistsException;
 import backend.shop.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionsHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<?> userAlreadyExitstsExceptionHandler(UserAlreadyExistsException ex, WebRequest req){
+    public ResponseEntity<ErrorResponse> userAlreadyExitstsExceptionHandler(UserAlreadyExistsException ex, WebRequest req){
         ErrorResponse err = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
@@ -31,7 +32,7 @@ public class GlobalExceptionsHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> userNotDeletedExceptionHandler(UserNotFoundException ex, WebRequest req){
+    public ResponseEntity<ErrorResponse> userNotDeletedExceptionHandler(UserNotFoundException ex, WebRequest req){
         ErrorResponse err = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -43,7 +44,7 @@ public class GlobalExceptionsHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> methodArgumentNotValidExcpetionHandler(MethodArgumentNotValidException ex, WebRequest req){
+    public ResponseEntity<ErrorResponse> methodArgumentNotValidExcpetionHandler(MethodArgumentNotValidException ex, WebRequest req){
         String errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(err -> err.getField() + ":" + err.getDefaultMessage())
                 .collect(Collectors.joining(", "));
@@ -60,8 +61,20 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<ErrorResponse> orderNotFoundExceptionHandler(Exception ex, WebRequest req){
+        ErrorResponse err = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(req.getDescription(false).replace("uri=", ""))
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> serverExceptionsHandler(Exception ex, WebRequest req){
+    public ResponseEntity<ErrorResponse> serverExceptionsHandler(Exception ex, WebRequest req){
         log.error("KRYTYCZNY BŁĄD SERWERA: " + ex.getMessage());
 
         ErrorResponse err = ErrorResponse.builder()
@@ -73,4 +86,5 @@ public class GlobalExceptionsHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
     }
+
 }
